@@ -85,7 +85,7 @@ following Copyright and Conditions of use:
 */
 
 /* the following version of the Tom Thumb Font was entirely
-   hand-made by me in my programmer’s editor by simply looking at
+   hand-made by me in my programmerÃ­s editor by simply looking at
    a bitmap of the font characters and counting pixels.
 
    Licence: You may use this program for whatever you wish as long
@@ -763,7 +763,7 @@ unsigned char tomthumb[1728] = {
 0,0,0,
 0,0,0,
 0,0,0,
-/* ¦ */
+/* Â¶ */
 1,1,1,
 0,0,0,
 1,1,1,
