@@ -1581,20 +1581,20 @@ ushort WriteVbmpHeader(FILE *fp) {
   memset((char *)&mybmp.bfi.bfType[0], 0, sizeof(BMPHEADER));
 
   /* create the info header */
-  mybmp.bmi.biSize = (ulong)40;
-  mybmp.bmi.biWidth = (ulong)140;
-  mybmp.bmi.biHeight = (ulong)192;
+  mybmp.bmi.biSize = (uLong)40;
+  mybmp.bmi.biWidth = (uLong)140;
+  mybmp.bmi.biHeight = (uLong)192;
   mybmp.bmi.biPlanes = 1;
   mybmp.bmi.biBitCount = 4;
-  mybmp.bmi.biCompression = (ulong)BI_RGB;
+  mybmp.bmi.biCompression = (uLong)BI_RGB;
 
-  mybmp.bmi.biSizeImage = (ulong)outpacket;
+  mybmp.bmi.biSizeImage = (uLong)outpacket;
   mybmp.bmi.biSizeImage *= mybmp.bmi.biHeight;
 
   /* create the file header */
   mybmp.bfi.bfType[0] = 'B';
   mybmp.bfi.bfType[1] = 'M';
-  mybmp.bfi.bfOffBits = (ulong)sizeof(BMPHEADER) + sizeof(RGBQUAD) * 16;
+  mybmp.bfi.bfOffBits = (uLong)sizeof(BMPHEADER) + sizeof(RGBQUAD) * 16;
   mybmp.bfi.bfSize = mybmp.bmi.biSizeImage + mybmp.bfi.bfOffBits;
 
   /* write the header for the output BMP */
@@ -2583,7 +2583,7 @@ int savesprite() {
 /* read and remap a mask line from an open mask file */
 /* required by dithered and non-dithered routines when in use */
 sshort ReadMaskLine(ushort y) {
-  ulong pos;
+  uLong pos;
   ushort x, packet;
   uchar ch;
 
@@ -2600,7 +2600,7 @@ sshort ReadMaskLine(ushort y) {
   } else
     packet = 140;
 
-  pos = (ulong)(191 - y);
+  pos = (uLong)(191 - y);
   pos *= packet;
   pos += maskbmp.bfi.bfOffBits;
 
@@ -3661,24 +3661,24 @@ ushort WriteDIBHeader(FILE *fp, ushort pixels, ushort rasters) {
   memset((char *)&mybmp.bfi.bfType[0], 0, sizeof(BMPHEADER));
 
   /* create the info header */
-  mybmp.bmi.biSize = (ulong)sizeof(BITMAPINFOHEADER);
-  mybmp.bmi.biWidth = (ulong)pixels;
-  mybmp.bmi.biHeight = (ulong)rasters;
+  mybmp.bmi.biSize = (uLong)sizeof(BITMAPINFOHEADER);
+  mybmp.bmi.biWidth = (uLong)pixels;
+  mybmp.bmi.biHeight = (uLong)rasters;
   mybmp.bmi.biPlanes = 1;
   mybmp.bmi.biBitCount = 24;
-  mybmp.bmi.biCompression = (ulong)BI_RGB;
+  mybmp.bmi.biCompression = (uLong)BI_RGB;
 
   /* BMP scanlines are padded to a multiple of 4 bytes (DWORD) */
   outpacket = (ushort)mybmp.bmi.biWidth * 3;
   while (outpacket % 4 != 0)
     outpacket++;
-  mybmp.bmi.biSizeImage = (ulong)outpacket;
+  mybmp.bmi.biSizeImage = (uLong)outpacket;
   mybmp.bmi.biSizeImage *= mybmp.bmi.biHeight;
 
   /* create the file header */
   mybmp.bfi.bfType[0] = 'B';
   mybmp.bfi.bfType[1] = 'M';
-  mybmp.bfi.bfOffBits = (ulong)sizeof(BMPHEADER);
+  mybmp.bfi.bfOffBits = (uLong)sizeof(BMPHEADER);
   mybmp.bfi.bfSize = mybmp.bmi.biSizeImage + mybmp.bfi.bfOffBits;
 
   /* write the header for the output BMP */
@@ -4107,7 +4107,7 @@ FILE *ResizeBMP(FILE *fp, sshort resize) {
   FILE *fp2;
   ushort x, y, packet, outpacket, chunks;
   ushort i, j, r, g, b;
-  ulong offset = 0L;
+  uLong offset = 0L;
 
 #ifdef TURBOC
   if (resize == 0)
@@ -4875,7 +4875,7 @@ sshort Convert() {
   ushort x, x1, x2, y, yoff, i, packet, outpacket, width, dwidth, red, green,
       blue;
   uchar r, g, b, drawcolor;
-  ulong pos, prepos;
+  uLong pos, prepos;
 
   /* if using a mask file, open it now */
   /* leave it open throughout the conversion session */
@@ -4897,7 +4897,7 @@ sshort Convert() {
 
   printf("sizeof(uchar): %lu\n", sizeof(uchar));
   printf("sizeof(ushort): %lu\n", sizeof(ushort));
-  printf("sizeof(ulong): %lu\n", sizeof(ulong));
+  printf("sizeof(uLong): %lu\n", sizeof(uLong));
   printf("sizeof(sshort): %lu\n", sizeof(sshort));
 #endif
 
@@ -5043,7 +5043,7 @@ sshort Convert() {
         for (y = 0; y < bmpheight; y++)
           fwrite((char *)&dibscanline1[0], 1, outpacket, fpreview);
         /* set the seek distance to scanline 0 in the preview file */
-        prepos = (ulong)(bmpheight - 1);
+        prepos = (uLong)(bmpheight - 1);
         prepos *= outpacket;
         prepos += mybmp.bfi.bfOffBits;
       }
@@ -5055,7 +5055,7 @@ sshort Convert() {
   }
 
   /* read BMP from top scanline to bottom scanline */
-  pos = (ulong)(bmpheight - 1);
+  pos = (uLong)(bmpheight - 1);
   pos *= packet;
   pos += bfi.bfOffBits;
 
@@ -5292,7 +5292,7 @@ sshort ConvertMono() {
   FILE *fp, *fpreview;
   sshort status = INVALID;
   ushort x, y, i, packet, outpacket, red, green, blue, verbatim;
-  ulong pos, prepos;
+  uLong pos, prepos;
 
   if ((fp = fopen(bmpfile, "rb")) == NULL) {
     printf("Error Opening %s for reading!\n", bmpfile);
@@ -5381,7 +5381,7 @@ sshort ConvertMono() {
         for (y = 0; y < bmpheight; y++)
           fwrite((char *)&dibscanline1[0], 1, outpacket, fpreview);
         /* set the seek distance to scanline 0 in the preview file */
-        prepos = (ulong)(bmpheight - 1);
+        prepos = (uLong)(bmpheight - 1);
         prepos *= outpacket;
         prepos += mybmp.bfi.bfOffBits;
       }
@@ -5393,7 +5393,7 @@ sshort ConvertMono() {
   }
 
   /* read BMP from top scanline to bottom scanline */
-  pos = (ulong)(bmpheight - 1);
+  pos = (uLong)(bmpheight - 1);
   pos *= packet;
   pos += bfi.bfOffBits;
 

@@ -36,6 +36,9 @@
 /* ***************************************************************** */
 
 #include "tomthumb.h"
+#ifdef __linux__
+#include <ctype.h>
+#endif
 
 /* ***************************************************************** */
 /* ========================== defines ============================== */
@@ -112,7 +115,7 @@
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;
-typedef unsigned int ulong;
+typedef unsigned int uLong;
 typedef short sshort;
 
 /* Bitmap Header structures */
@@ -124,17 +127,17 @@ typedef struct tagBITMAPINFOHEADER
 {}
 #endif
 {
-    ulong   biSize;
-    ulong   biWidth;
-    ulong   biHeight;
+    uLong   biSize;
+    uLong   biWidth;
+    uLong   biHeight;
     ushort  biPlanes;
     ushort  biBitCount;
-    ulong   biCompression;
-    ulong   biSizeImage;
-    ulong   biXPelsPerMeter;
-    ulong   biYPelsPerMeter;
-    ulong   biClrUsed;
-    ulong   biClrImportant;
+    uLong   biCompression;
+    uLong   biSizeImage;
+    uLong   biXPelsPerMeter;
+    uLong   biYPelsPerMeter;
+    uLong   biClrUsed;
+    uLong   biClrImportant;
 } BITMAPINFOHEADER;
 
 #ifdef MINGW
@@ -144,10 +147,10 @@ typedef struct tagBITMAPFILEHEADER
 #endif
 {
     uchar   bfType[2];
-    ulong   bfSize;
+    uLong   bfSize;
     ushort  bfReserved1;
     ushort  bfReserved2;
-    ulong   bfOffBits;
+    uLong   bfOffBits;
 } BITMAPFILEHEADER;
 
 #ifdef MINGW
