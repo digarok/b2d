@@ -26,13 +26,13 @@ jobs:
       run: cd tests ; ./test.sh
     - name: Upload binary artifact 
       if: matrix.os != 'windows-latest'
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
-        name: binary
+        name: ${{ format('binary-{0}', matrix.os) }}
         path: b2d
     - name: Upload binary artifact exe
       if: matrix.os == 'windows-latest'
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: binary
         path: b2d.exe
@@ -61,7 +61,7 @@ jobs:
         echo "$UPLOAD_URL" > release_url.txt
         echo "UPLOAD_URL= $UPLOAD_URL"
     - name: Upload URL for later use
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: data
         path: release_url.txt
@@ -92,7 +92,7 @@ jobs:
     - name: Download Release Binary
       uses: actions/download-artifact@v1
       with:
-        name: binary
+        name: ${{ format('binary-{0}', matrix.os) }}
     
     - name: Package NIX
       if: matrix.os != 'windows-latest'
