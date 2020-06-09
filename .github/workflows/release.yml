@@ -34,7 +34,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v2
       with:
-        name: binary
+        name: ${{ format('binary-{0}', matrix.os) }}
         path: b2d.exe
 
   create-release:
@@ -97,11 +97,11 @@ jobs:
     - name: Package NIX
       if: matrix.os != 'windows-latest'
       run: |
-        zip --junk-paths b2d.zip binary/b2d README.md
+        zip --junk-paths b2d.zip ${{ format('binary-{0}/b2d', matrix.os) }} README.md
     - name: Package WIN
       if: matrix.os == 'windows-latest'
       run: |
-        7z.exe a b2d.zip ./binary/b2d.exe README.md
+        7z.exe a b2d.zip ${{ format('./binary-{0}/b2d.exe', matrix.os) }} README.md
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1.0.1
