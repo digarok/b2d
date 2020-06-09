@@ -6740,11 +6740,15 @@ int main(int argc, char **argv) {
   /* user titling file */
   sprintf(usertextfile, "%s.txt", fname);
 
+  /* This breaks pathing on Linux which is case sensitive */
+  /* Maybe rewrite to not change case of the entire path */
+#if 0
   /* upper case basename for Apple II Output */
   for (idx = 0; fname[idx] != (uchar)0; idx++) {
     ch = toupper(fname[idx]);
     fname[idx] = ch;
   }
+#endif
   strcpy(hgrwork, fname);
 
   if (basename == 1) {
