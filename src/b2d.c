@@ -2027,7 +2027,6 @@ int savelofragment() {
     /* save single lo-res and double lo-res */
     /* save raster images of 48 or 40 scanlines
        (full graphics or mixed text and graphics) */
-
     if (lores == 1) {
       if (appletop == 1) {
         fl = 802;
@@ -3511,13 +3510,13 @@ void FloydSteinberg(int y, int width) {
                     * 2 1
                   1 2 1
                     1          (1/8)
-       
+
                   Serpentine
-       
+
                 1 2 *
                   1 2 1
                     1
-       
+
                   */
 
           /* if error summing is turned-on add the accumulated rounding error
@@ -6740,15 +6739,22 @@ int main(int argc, char **argv) {
   /* user titling file */
   sprintf(usertextfile, "%s.txt", fname);
 
-  /* This breaks pathing on Linux which is case sensitive */
-  /* Maybe rewrite to not change case of the entire path */
-#if 0
   /* upper case basename for Apple II Output */
-  for (idx = 0; fname[idx] != (uchar)0; idx++) {
-    ch = toupper(fname[idx]);
-    fname[idx] = ch;
+  // get filename part so we only upper case that
+  char *filename =  strrchr(fname, '/');
+  // no slash found so use full string
+  if (!filename) {
+    filename = fname;
+  } else {
+    filename++;  // advance pointer past '/'
   }
-#endif
+  // now upper part/full string
+  for (idx = 0; filename[idx] != (uchar)0; idx++) {
+    ch = toupper(filename[idx]);
+    filename[idx] = ch;
+  }
+
+
   strcpy(hgrwork, fname);
 
   if (basename == 1) {
