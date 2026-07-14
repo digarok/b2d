@@ -287,6 +287,7 @@ documentation can be reviewed for additional information.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "b2d.h"
 
@@ -2063,14 +2064,14 @@ int savelofragment() {
         break;
       /* first 40 bytes goes to auxiliary memory (even pixels) */
       for (x = 0; x < 40; x++) {
-        remap = dhrgetpixel(x, y);
+        remap = dhrgetpixel(x*2, y);
         temp = dloauxcolor[remap];
         setlopixel(temp, x, y, 1);
       }
       /* followed by the interleaf (odd pixels)
          next 40 bytes goes to main memory */
       for (x = 0; x < 40; x++) {
-        temp = dhrgetpixel(x, y);
+        temp = dhrgetpixel(x*2+1, y);
         setlopixel(temp, x + 40, y, 1);
       }
     }
