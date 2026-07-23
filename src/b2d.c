@@ -2939,7 +2939,7 @@ void FloydSteinberg(int y, int width) {
         /* restore dither buffer after both test runs for the final run */
         memcpy(&redDither[0], &redSave[0], 640);
         memcpy(&greenDither[0], &greenSave[0], 640);
-        memcpy(&blueSave[0], &blueDither[0], 640);
+        memcpy(&blueDither[0], &blueSave[0], 640);
       }
 
       /* for the first two runs, dither7 does not change */
