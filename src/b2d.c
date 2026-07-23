@@ -1522,7 +1522,7 @@ void plotthumbDHGR(unsigned char ch, unsigned x, unsigned y, unsigned char fg,
       }
     }
 
-    if (y++ > 191)
+    if (++y > 191)
       break;
   }
 }
@@ -4743,7 +4743,7 @@ sshort ValidLoResSizeRange() {
         /* mixed text and graphics */
         /* 40 x 48 and 80 x 48 - windowbox required */
         /* top justified if not otherwise specified */
-        if (justify == 1 && (jyoffset > -1 || jyoffset < 9)) {
+        if (justify == 1 && (jyoffset > -1 && jyoffset < 9)) {
           jyoffset = 8 - jyoffset;
           break;
         }
@@ -4822,7 +4822,7 @@ sshort ValidLoResSizeRange() {
         /* mixed text and graphics */
         /* 160 x 96 - windowbox required */
         /* top justified if not otherwise specified */
-        if (justify == 1 && (jyoffset > -1 || jyoffset < 17)) {
+        if (justify == 1 && (jyoffset > -1 && jyoffset < 17)) {
           jyoffset = 16 - jyoffset;
           break;
         }
@@ -5501,6 +5501,7 @@ sshort ConvertMono() {
     fread((char *)&bmpscanline[0], 1, packet, fp);
     if (hgroutput != 1) {
       pos -= packet;
+      fseek(fp, pos, SEEK_SET);
       fread((char *)&bmpscanline2[0], 1, packet, fp);
     }
 
@@ -6955,8 +6956,8 @@ int main(int argc, char **argv) {
       sprintf(hgrmono, "%sM.BIN", hgrwork);
       if (mono == 1) {
         sprintf(a2fcfile, "%s.A2FM", hgrwork);
-        sprintf(mainfile, "%sM.BIN#062000", hgrwork);
-        sprintf(auxfile, "%sM.AUX#062000", hgrwork);
+        sprintf(mainfile, "%sM.BIN", hgrwork);
+        sprintf(auxfile, "%sM.AUX", hgrwork);
       }
     } else {
       sprintf(hgrcolor, "%s.BIN", hgrwork);
