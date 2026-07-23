@@ -1961,6 +1961,81 @@ void hgrline(int y) {
   }
 }
 
+/* the color HGR preview file is plotted during conversion, before the
+   palette bit for each HGR byte has been decided, so it can show adjacent
+   colors from both HGR palettes - something the real screen cannot do.
+   after the HGR file buffer is built, re-write the preview pixels by
+   decoding the encoded HGR bytes the way a display would:
+
+   a lone lit half-pixel is violet/green (palette bit clear) or blue/orange
+   (palette bit set) depending on column parity, adjacent lit half-pixels
+   are white, and an unlit half-pixel between two lit ones continues the
+   color run */
+void RewriteHgrPreview(ushort width, ushort outpacket) {
+
+  FILE *fp;
+  uLong prepos;
+  int x, y, i, j, k;
+  uchar bits[280], pals[280], drawcolor, *ptr;
+
+  fp = fopen(previewfile, "rb+");
+  if (fp == NULL)
+    return;
+
+  /* zero the scanline for the BMP padding bytes */
+  memset(&previewline[0], 0, 960);
+
+  /* the preview file is written from top scanline to bottom scanline */
+  prepos = (uLong)(bmpheight - 1);
+  prepos *= outpacket;
+  prepos += mybmp.bfi.bfOffBits;
+
+  for (y = 0; y < (int)bmpheight && y < 192; y++, prepos -= outpacket) {
+
+    /* unpack the encoded scanline into half-pixel bits and palette bits */
+    ptr = (uchar *)&hgrbuf[HB[y] - 0x2000];
+    for (i = 0, k = 0; i < 40; i++) {
+      for (j = 0; j < 7; j++, k++) {
+        bits[k] = (uchar)((ptr[i] >> j) & 1);
+        pals[k] = (uchar)(ptr[i] & 0x80);
+      }
+    }
+
+    for (x = 0, i = 0; x < (int)width && x < 280; x++) {
+      if (bits[x] == 1) {
+        if ((x > 0 && bits[x - 1] == 1) || (x < 279 && bits[x + 1] == 1)) {
+          /* adjacent lit half-pixels display as white */
+          drawcolor = LOWHITE;
+        } else if (x % 2 == 0) {
+          drawcolor = (pals[x] == 0) ? LOPURPLE : LOMEDBLUE;
+        } else {
+          drawcolor = (pals[x] == 0) ? LOLTGREEN : LOORANGE;
+        }
+      } else if (x > 0 && x < 279 && bits[x - 1] == 1 && bits[x + 1] == 1) {
+        /* an unlit half-pixel between two lit ones continues the color,
+           which belongs to the opposite column parity */
+        if (x % 2 == 1)
+          drawcolor = (pals[x] == 0) ? LOPURPLE : LOMEDBLUE;
+        else
+          drawcolor = (pals[x] == 0) ? LOLTGREEN : LOORANGE;
+      } else {
+        drawcolor = LOBLACK;
+      }
+      previewline[i] = rgbPreview[drawcolor][BLUE];
+      i++;
+      previewline[i] = rgbPreview[drawcolor][GREEN];
+      i++;
+      previewline[i] = rgbPreview[drawcolor][RED];
+      i++;
+    }
+
+    fseek(fp, prepos, SEEK_SET);
+    fwrite((char *)&previewline[0], 1, outpacket, fp);
+  }
+
+  fclose(fp);
+}
+
 /* routines to save to Apple 2 Lores Format */
 
 #define LORAGWIDTH 80
@@ -5281,6 +5356,14 @@ sshort Convert() {
 
   if (savedhr() != SUCCESS)
     return INVALID;
+
+  /* the color HGR preview plotted above does not reflect the palette bit
+     chosen for each HGR byte - now that savedhr() has encoded the HGR
+     buffer, re-write the preview from it so the preview matches the
+     actual output */
+  if (preview == 1 && hgroutput == 1 && mono == 0 && outputtype == BIN_OUTPUT)
+    RewriteHgrPreview(width, outpacket);
+
   if (savesprite() != SUCCESS)
     return INVALID;
 
