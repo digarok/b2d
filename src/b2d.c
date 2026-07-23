@@ -1522,7 +1522,7 @@ void plotthumbDHGR(unsigned char ch, unsigned x, unsigned y, unsigned char fg,
       }
     }
 
-    if (y++ > 191)
+    if (++y > 191)
       break;
   }
 }
