@@ -6955,8 +6955,8 @@ int main(int argc, char **argv) {
       sprintf(hgrmono, "%sM.BIN", hgrwork);
       if (mono == 1) {
         sprintf(a2fcfile, "%s.A2FM", hgrwork);
-        sprintf(mainfile, "%sM.BIN#062000", hgrwork);
-        sprintf(auxfile, "%sM.AUX#062000", hgrwork);
+        sprintf(mainfile, "%sM.BIN", hgrwork);
+        sprintf(auxfile, "%sM.AUX", hgrwork);
       }
     } else {
       sprintf(hgrcolor, "%s.BIN", hgrwork);
