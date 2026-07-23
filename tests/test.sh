@@ -22,3 +22,17 @@ if [ $? -ne 0 ] ; then
 fi
 
 echo "LORES TEST PASSED"
+
+#####################################
+# DOUBLE LORES
+echo "DOUBLE LORES TEST START"
+echo " - RUN: '$B2D gradient-80x48.bmp DL N'"
+$B2D gradient-80x48.bmp DL N
+
+diff GRADIENT-80X48.DLO GRADIENT.DLORES
+if [ $? -ne 0 ] ; then
+  echo "DOUBLE LORES FAIL!"
+  exit 1
+fi
+
+echo "DOUBLE LORES TEST PASSED"

@@ -1,0 +1,7 @@
+# built binary
+/b2d
+b2d.exe
+
+# test conversion outputs (references like *.LORES / *.DLORES are tracked)
+tests/*.SLO
+tests/*.DLO
