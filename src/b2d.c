@@ -4743,7 +4743,7 @@ sshort ValidLoResSizeRange() {
         /* mixed text and graphics */
         /* 40 x 48 and 80 x 48 - windowbox required */
         /* top justified if not otherwise specified */
-        if (justify == 1 && (jyoffset > -1 || jyoffset < 9)) {
+        if (justify == 1 && (jyoffset > -1 && jyoffset < 9)) {
           jyoffset = 8 - jyoffset;
           break;
         }
@@ -4822,7 +4822,7 @@ sshort ValidLoResSizeRange() {
         /* mixed text and graphics */
         /* 160 x 96 - windowbox required */
         /* top justified if not otherwise specified */
-        if (justify == 1 && (jyoffset > -1 || jyoffset < 17)) {
+        if (justify == 1 && (jyoffset > -1 && jyoffset < 17)) {
           jyoffset = 16 - jyoffset;
           break;
         }
