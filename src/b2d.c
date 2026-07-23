@@ -5501,6 +5501,7 @@ sshort ConvertMono() {
     fread((char *)&bmpscanline[0], 1, packet, fp);
     if (hgroutput != 1) {
       pos -= packet;
+      fseek(fp, pos, SEEK_SET);
       fread((char *)&bmpscanline2[0], 1, packet, fp);
     }
 
