@@ -1,19 +1,22 @@
 name: Release Builds
-on: push
+on:
+  push:
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-and-store-artifact:
     name: Build
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
     steps:
     - uses: actions/checkout@v7
-    - uses: ilammy/msvc-dev-cmd@v1
+    - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
       if: matrix.os == 'windows-latest'
     - name: Make GNU
       if: matrix.os != 'windows-latest'
@@ -44,6 +47,8 @@ jobs:
     name: Create Release
     needs: build-and-store-artifact
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - name: Download binary artifacts
       uses: actions/download-artifact@v8
@@ -56,7 +61,8 @@ jobs:
           mv "$f" "${f%.zip}-${{ github.ref_name }}.zip"
         done
     - name: Create Release and Upload Assets
-      uses: softprops/action-gh-release@v3
+      uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
       with:
         name: Release ${{ github.ref_name }}
+        generate_release_notes: true
         files: b2d-*.zip
